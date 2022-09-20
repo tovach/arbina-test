@@ -2,6 +2,8 @@
   "name": "arbina",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000",
+  "homepage": ".",
   "dependencies": {
     "@blueprintjs/core": "^4.10.1",
     "@blueprintjs/table": "^4.6.7",

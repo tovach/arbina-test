@@ -1,16 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserAction } from '@types';
 
 type TableSliceState = {
   loadingStatus: boolean;
   errorStatus: string | undefined;
   items: UserAction[];
+  searchResults: UserAction[];
 };
 
 const initialState: TableSliceState = {
   loadingStatus: false,
   errorStatus: undefined,
-  items: [] as UserAction[]
+  items: [] as UserAction[],
+  searchResults: [] as UserAction[]
 };
 
 export const fetchUserActions = createAsyncThunk<UserAction[], string, { rejectValue: string }>(
@@ -35,7 +37,16 @@ export const fetchUserActions = createAsyncThunk<UserAction[], string, { rejectV
 const tableSlice = createSlice({
   name: 'tableSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    findActionByInput: (state, action: PayloadAction<string>) => {
+      if (action.payload.length === 0) {
+        state.items = state.searchResults;
+      }
+      state.items = state.searchResults.filter((obj) =>
+        Object.values(obj).some((value) => value.includes(action.payload))
+      );
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserActions.pending, (state) => {
@@ -44,6 +55,7 @@ const tableSlice = createSlice({
       .addCase(fetchUserActions.fulfilled, (state, action) => {
         state.loadingStatus = false;
         state.items = action.payload;
+        state.searchResults = action.payload;
       })
       .addCase(fetchUserActions.rejected, (state, action) => {
         state.loadingStatus = false;
@@ -53,3 +65,4 @@ const tableSlice = createSlice({
 });
 
 export default tableSlice.reducer;
+export const { findActionByInput } = tableSlice.actions;
