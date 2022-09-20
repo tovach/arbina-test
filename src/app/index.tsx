@@ -1,13 +1,8 @@
 import { FC } from 'react';
 
-import { Button } from '@blueprintjs/core';
+import { ActionsTable } from '@components/actionsTable';
 
 import '@app/styles/index.css';
 
-export const App: FC = () => (
-  <>
-    <Button>Heloo</Button>
-    <div>Heloo</div>
-    <div>Heloo</div>
-  </>
-);
+
+export const App: FC = () => <h3>hello</h3>;
